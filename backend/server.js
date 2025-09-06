@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -10,13 +10,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// connect to MongoDB (local for now)
-mongoose.connect("mongodb://127.0.0.1:27017/book_explorer", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("✅ MongoDB connected"))
-.catch(err => console.log("❌ MongoDB connection error:", err));
+// connect to MongoDB (from .env)
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch(err => console.log("❌ MongoDB connection error:", err));
 
 app.get("/", (req, res) => {
   res.send("Book Explorer API is running 🚀");
@@ -24,12 +21,13 @@ app.get("/", (req, res) => {
 
 app.use("/api/books", bookRoutes);
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 const Book = require("./models/Book");
 
+// seed endpoint (for testing/demo)
 app.get("/api/seed", async (req, res) => {
-  await Book.deleteMany({}); 
+  await Book.deleteMany({});
   await Book.insertMany([
     {
       title: "The Beginner’s Guide to Node.js",
@@ -37,7 +35,7 @@ app.get("/api/seed", async (req, res) => {
       availability: "In stock",
       rating: "Four",
       detailUrl: "http://example.com/nodejs",
-      imageUrl: "http://example.com/img1.jpg"
+      imageUrl: "http://example.com/img1.jpg",
     },
     {
       title: "Learning React the Easy Way",
@@ -45,7 +43,7 @@ app.get("/api/seed", async (req, res) => {
       availability: "In stock",
       rating: "Five",
       detailUrl: "http://example.com/react",
-      imageUrl: "http://example.com/img2.jpg"
+      imageUrl: "http://example.com/img2.jpg",
     },
     {
       title: "Mastering MongoDB",
@@ -53,14 +51,12 @@ app.get("/api/seed", async (req, res) => {
       availability: "Out of stock",
       rating: "Three",
       detailUrl: "http://example.com/mongodb",
-      imageUrl: "http://example.com/img3.jpg"
-    }
+      imageUrl: "http://example.com/img3.jpg",
+    },
   ]);
   res.send("Dummy data inserted ✅");
 });
 
-
-
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
