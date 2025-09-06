@@ -5,12 +5,13 @@ function BookDetail() {
   const { id } = useParams(); 
   const [book, setBook] = useState(null);
 
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/books/${id}`)
-      .then((res) => res.json())
-      .then((data) => setBook(data))
-      .catch((err) => console.error("Error:", err));
-  }, [id]);
+useEffect(() => {
+  fetch(`https://book-explorer-s4gv.onrender.com/api/books/${id}`)
+    .then((res) => res.json())
+    .then((data) => setBook(data))
+    .catch((err) => console.error("Error:", err));
+}, [id]);
+
 
   if (!book) return <p>Loading book details...</p>;
 
