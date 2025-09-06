@@ -18,7 +18,8 @@ function Home() {
 
   // fetch books from backend API with pagination + filters
   useEffect(() => {
-    let url = `http://localhost:5000/api/books?page=${currentPage}&limit=${limit}`;
+    let url = `https://book-explorer-s4gv.onrender.com/api/books?page=${currentPage}&limit=${limit}`;
+
 
     if (search) url += `&title=${search}`;
     if (ratingFilter) url += `&rating=${ratingFilter}`;
